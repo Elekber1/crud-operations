@@ -1,14 +1,15 @@
 package az.pashabannk.exercisecrudoperations.service.Impl;
 
+import az.pashabannk.exercisecrudoperations.entities.CustomerDao;
+import az.pashabannk.exercisecrudoperations.mapper.CustomerMapper;
 import az.pashabannk.exercisecrudoperations.model.CustomerDTO;
 import az.pashabannk.exercisecrudoperations.repository.CustomerRepository;
 import az.pashabannk.exercisecrudoperations.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 
 @Service
@@ -16,44 +17,44 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
 
+    private CustomerMapper customerMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     @Override
-    public void createCustomer(CustomerDTO customerDTO) {
-        logger.info("createCustomer Service: ");
-        customerRepository.createCustomer(customerDTO);
-    }
-
-    @Override
-    public Collection<CustomerDTO> updateCustomer(String customerId, CustomerDTO customerDTO) {
-        logger.info("updateCustomer Service: ");
-
-        return customerRepository.updateCustomer(customerId, customerDTO);
-    }
-
-    @Override
-    public void deleteCustomerById(String customerId) {
-        logger.info("deleteCustomerById Service: ");
-
-        customerRepository.deleteCustomerById(customerId);
-    }
-
-    @Override
-    public Collection<CustomerDTO> findAllCustomers() {
+    public List<CustomerDTO> findAll() {
         logger.info("findAllCustomers Service: ");
-
-        return customerRepository.findAllCustomers();
+        List<CustomerDao> customerDaos = (List<CustomerDao>) customerRepository.findAll();
+        return customerMapper.customerDaoListToCustomerDTOList(customerDaos);
     }
 
     @Override
-    public CustomerDTO findCustomersById(String customerId) {
+    public CustomerDTO findOne(Long id) {
+        CustomerDao customerDao = customerRepository.findById(id).orElse(null);
         logger.info("findCustomersById Service: ");
+        return customerMapper.customerDaoToCustomerDTO(customerDao);
+    }
 
-        return customerRepository.findCustomersById(customerId);
+    @Override
+    public void updateCustomer(CustomerDTO customerDTO) {
+        logger.info("updateCustomer Service: ");
+        customerRepository.save(customerMapper.customerDTOToCustomerDao(customerDTO));
+    }
+
+    @Override
+    public void addCustomer(CustomerDTO customerDTO) {
+        logger.info("addCustomer Service: ");
+        customerRepository.save(customerMapper.customerDTOToCustomerDao(customerDTO));
+    }
+
+    @Override
+    public void removeCustomer(Long id) {
+        logger.info("removeCustomerById Service: ");
+        customerRepository.deleteById(id);
     }
 }

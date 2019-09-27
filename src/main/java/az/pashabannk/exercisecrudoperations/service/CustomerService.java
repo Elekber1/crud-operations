@@ -1,19 +1,19 @@
 package az.pashabannk.exercisecrudoperations.service;
 
 import az.pashabannk.exercisecrudoperations.model.CustomerDTO;
-import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface CustomerService {
 
-    void createCustomer(CustomerDTO customerDTO);
+    List<CustomerDTO> findAll();
 
-    Collection<CustomerDTO> updateCustomer(String customerId, CustomerDTO customerDTO);
+    CustomerDTO findOne(Long id);
 
-    void deleteCustomerById(String customerId);
+    void updateCustomer(CustomerDTO customerDTO);
 
-    Collection<CustomerDTO> findAllCustomers();
+    void addCustomer(CustomerDTO customerDTO);
 
-    CustomerDTO findCustomersById(String customerId);
+    void removeCustomer(Long id);
+
 }
