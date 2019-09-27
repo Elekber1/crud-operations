@@ -1,19 +1,9 @@
 package az.pashabannk.exercisecrudoperations.repository;
 
-import az.pashabannk.exercisecrudoperations.model.CustomerDTO;
-import org.springframework.scheduling.annotation.Scheduled;
+import az.pashabannk.exercisecrudoperations.entities.CustomerDao;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
 
-public interface CustomerRepository {
+public interface CustomerRepository extends CrudRepository<CustomerDao, Long> {
 
-    void createCustomer(CustomerDTO customerDTO);
-
-    Collection<CustomerDTO> updateCustomer(String customerId, CustomerDTO customerDTO);
-
-    void deleteCustomerById(String customerId);
-
-    Collection<CustomerDTO> findAllCustomers();
-
-    CustomerDTO findCustomersById(String id);
 }

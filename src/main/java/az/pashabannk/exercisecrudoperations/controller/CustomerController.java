@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +16,7 @@ import javax.validation.constraints.Min;
 
 @Validated
 @RestController
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -24,48 +24,48 @@ public class CustomerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
-    @GetMapping("/findAllCustomers")
+    @GetMapping("/")
     public ResponseEntity<Object> findAllCustomers() {
         logger.info("findAllCustomers: ");
-        return new ResponseEntity<>(customerService.findAllCustomers(), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody CustomerDTO customerDTO) {
-        logger.info("createProduct: ");
-        customerService.createCustomer(customerDTO);
-        System.out.println("Creating customer... ");
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> findCustomersById(@PathVariable
+                                                    @Min(value = 1, message = "id must be greater than or equal 1")
+                                                    @Max(value = 1000, message = "id must be lower than or equal to 1000")
+                                                            Long id) {
+        logger.info("findCustomersById: ");
+        return new ResponseEntity<>(customerService.findOne(id), HttpStatus.OK);
+    }
 
+
+    @PostMapping("/")
+    public ResponseEntity<Object> createCustomer(@Valid
+                                                 @RequestBody CustomerDTO customerDTO) {
+        logger.info("createProduct: ");
+        customerService.addCustomer(customerDTO);
+        System.out.println("Creating customer... ");
 
         return new ResponseEntity<>("Customer is created successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/{customerId}")
-    public ResponseEntity<Object> findCustomersById(@PathVariable
-                                                    @Min(value = 1, message = "id must be greater than or equal 1")
-                                                    @Max(value = 1000, message = "id must be lower than or equal to 1000")
-                                                            String customerId) {
-        logger.info("findCustomersById: ");
-        return new ResponseEntity<>(customerService.findCustomersById(customerId), HttpStatus.OK);
-    }
 
-    @PutMapping("/{customerId}")
-    public ResponseEntity<Object> updateCustomer(@PathVariable
-                                                 @Min(value = 1, message = "id must be greater than or equal 1")
-                                                 @Max(value = 1000, message = "id must be lower than or equal to 1000")
-                                                         String customerId,
-                                                 @Valid @RequestBody CustomerDTO customerDTO) {
+    @PutMapping("/")
+    public ResponseEntity<Object> updateCustomer(@Valid
+                                                 @RequestBody CustomerDTO customerDTO) {
         logger.info("updateCustomer: ");
-        return new ResponseEntity<>(customerService.updateCustomer(customerId, customerDTO), HttpStatus.OK);
+        customerService.updateCustomer(customerDTO);
+        return new ResponseEntity<>("Customer is updated successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{customerId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCustomerById(@PathVariable
                                                      @Min(value = 1, message = "id must be greater than or equal 1")
                                                      @Max(value = 1000, message = "id must be lower than or equal to 1000")
-                                                             String customerId) {
+                                                             Long id) {
         logger.info("deleteCustomerById: ");
-        customerService.deleteCustomerById(customerId);
+        customerService.removeCustomer(id);
         return new ResponseEntity<>("Customer is deleted successsfully", HttpStatus.OK);
     }
 }
