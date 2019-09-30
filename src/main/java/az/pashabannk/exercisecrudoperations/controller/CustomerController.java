@@ -45,8 +45,6 @@ public class CustomerController {
                                                  @RequestBody CustomerDTO customerDTO) {
         logger.info("createProduct: ");
         customerService.addCustomer(customerDTO);
-        System.out.println("Creating customer... ");
-
         return new ResponseEntity<>("Customer is created successfully", HttpStatus.CREATED);
     }
 

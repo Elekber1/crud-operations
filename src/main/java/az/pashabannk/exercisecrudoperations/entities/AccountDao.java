@@ -1,36 +1,34 @@
 package az.pashabannk.exercisecrudoperations.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "customer2")
-public class CustomerDao {
+@Table(name = "account")
+public class AccountDao {
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
     @Column(name = "id")
     private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "last_name")
-    private String lastname;
-    @OneToMany(mappedBy = "customerDao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
+    private String password;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    @Fetch(FetchMode.JOIN)
     @JsonIgnore
-    private List<AccountDao> account;
-
-
+    private CustomerDao customerDao;
 }
