@@ -21,7 +21,7 @@ public class CustomerScheduler {
         this.customerMapper = customerMapper;
     }
 
-    @Scheduled(fixedRate = 20000)// 20 second
+    //    @Scheduled(fixedRate = 20000)// 20 second
     public void createRandomCustomer() {
         CustomerDTO customerDTO = new CustomerDTO();
         Random random = new Random();

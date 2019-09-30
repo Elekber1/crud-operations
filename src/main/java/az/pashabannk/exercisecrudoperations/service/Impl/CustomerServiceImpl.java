@@ -1,7 +1,10 @@
 package az.pashabannk.exercisecrudoperations.service.Impl;
 
+import az.pashabannk.exercisecrudoperations.entities.AccountDao;
 import az.pashabannk.exercisecrudoperations.entities.CustomerDao;
+import az.pashabannk.exercisecrudoperations.mapper.AccountMapper;
 import az.pashabannk.exercisecrudoperations.mapper.CustomerMapper;
+import az.pashabannk.exercisecrudoperations.model.AccountDTO;
 import az.pashabannk.exercisecrudoperations.model.CustomerDTO;
 import az.pashabannk.exercisecrudoperations.repository.CustomerRepository;
 import az.pashabannk.exercisecrudoperations.service.CustomerService;
@@ -18,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     private CustomerMapper customerMapper;
+
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
